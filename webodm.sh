@@ -105,10 +105,10 @@ usage(){
   echo "This program helps to manage the setup/teardown of the docker containers for running WebODM. We recommend that you read the full documentation of docker at https://docs.docker.com if you want to customize your setup."
   echo 
   echo "Command list:"
-  echo "	start [options]		Start WebODM"
-  echo "	stop			Stop WebODM"
-  echo "	down			Stop and remove WebODM's docker containers"
-  echo "	update			Update WebODM to the latest release"
+  echo "	start [options]		Start roof-mapping"
+  echo "	stop			Stop roof-mapping"
+  echo "	down			Stop and remove roof-mapping's docker containers"
+  echo "	update			Update roof-mapping to the latest release"
   echo "	rebuild			Rebuild all docker containers and perform cleanups"
   echo "	checkenv		Do an environment check and install missing components"
   echo "	test			Run the unit test suite (developers only)"
@@ -122,8 +122,8 @@ usage(){
   fi
   echo ""
   echo "Options:"
-  echo "	--port	<port>	Set the port that WebODM should bind to (default: $DEFAULT_PORT)"
-  echo "	--hostname	<hostname>	Set the hostname that WebODM will be accessible from (default: $DEFAULT_HOST)"
+  echo "	--port	<port>	Set the port that roof-mapping should bind to (default: $DEFAULT_PORT)"
+  echo "	--hostname	<hostname>	Set the hostname that roof-mapping will be accessible from (default: $DEFAULT_HOST)"
   echo "	--media-dir	<path>	Path where processing results will be stored to (default: $DEFAULT_MEDIA_DIR (docker named volume))"
   echo "	--ssl	Enable SSL and automatically request and install a certificate from letsencrypt.org. (default: $DEFAULT_SSL)"
   echo "	--ssl-key	<path>	Manually specify a path to the private key file (.pem) to use with nginx to enable SSL (default: None)"
@@ -177,7 +177,7 @@ run(){
 }
 
 start(){
-	echo "Starting WebODM..."
+	echo "Starting roof-mapping..."
 	echo ""
 	echo "Using the following environment:"
 	echo "================================"
@@ -284,7 +284,7 @@ plugin_volume_check(){
         echo "================"
         echo "WARNING: Your platform does not support automatic volume mounting. If you want to enable/disable/develop plugins you need to:"
         echo "1. Make sure docker can mount [$path] by modifying the docker File Sharing options"
-        echo "2. Pass the --mount-plugins-volume option to ./webodm.sh commands"
+        echo "2. Pass the --mount-plugins-volume option to ./roof-mapping.sh commands"
         echo "================"
         echo
     fi
@@ -297,7 +297,7 @@ plugin_enable(){
 
     if [ -e "plugins/$plugin_name/disabled" ]; then
         rm "plugins/$plugin_name/disabled"
-        echo "Plugin enabled. Run ./webodm.sh restart to apply the changes."
+        echo "Plugin enabled. Run ./roof-mapping.sh restart to apply the changes."
     else
         echo "Plugin already enabled."
     fi
@@ -310,7 +310,7 @@ plugin_disable(){
     
     if [ ! -e "plugins/$plugin_name/disabled" ]; then
         touch "plugins/$plugin_name/disabled"
-        echo "Plugin disabled. Run ./webodm.sh restart to apply the changes."
+        echo "Plugin disabled. Run ./roof-mapping.sh restart to apply the changes."
     else
         echo "Plugin already disabled."
     fi
@@ -353,23 +353,23 @@ if [[ $1 = "start" ]]; then
 	start
 elif [[ $1 = "stop" ]]; then
 	environment_check
-	echo "Stopping WebODM..."
+	echo "Stopping roof-mapping..."
 	run "docker-compose -f docker-compose.yml -f docker-compose.nodeodm.yml stop"
 elif [[ $1 = "restart" ]]; then
 	environment_check
-	echo "Restarting WebODM..."
+	echo "Restarting roof-mapping..."
 	down
 	start
 elif [[ $1 = "down" ]]; then
 	environment_check
-	echo "Tearing down WebODM..."
+	echo "Tearing down roof-mapping..."
 	down
 elif [[ $1 = "rebuild" ]]; then
 	environment_check
-	echo  "Rebuilding WebODM..."
+	echo  "Rebuilding roof-mappingM..."
 	rebuild
 elif [[ $1 = "update" ]]; then
-	echo "Updating WebODM..."
+	echo "Updating roof-mapping..."
 	run "git pull origin master"
 	run "docker pull opendronemap/node-opendronemap"
 	run "docker pull opendronemap/webodm_db"
